@@ -1,0 +1,223 @@
+@import "@mantine/core/styles.css";
+@import "@mantine/notifications/styles.css";
+@import "@mantine/charts/styles.css";
+@import "@mantine/dates/styles.css";
+
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --rh-bg:        #07080f;
+  --rh-bg-2:      #0d0e1a;
+  --rh-surface:   #111220;
+  --rh-surface-2: #181929;
+  --rh-border:    rgba(255,255,255,0.06);
+  --rh-border-2:  rgba(255,255,255,0.10);
+
+  --rh-indigo:  #6366f1;
+  --rh-violet:  #8b5cf6;
+  --rh-cyan:    #22d3ee;
+  --rh-green:   #22c55e;
+  --rh-amber:   #f59e0b;
+  --rh-red:     #ef4444;
+
+  --rh-grad: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --rh-grad-warm: linear-gradient(135deg, #f59e0b, #ef4444);
+  --rh-grad-text: linear-gradient(135deg, #c7d2fe, #a5b4fc, #818cf8);
+
+  --rh-text-1: #f1f5f9;
+  --rh-text-2: #94a3b8;
+  --rh-text-3: #475569;
+
+  --rh-radius-sm: 8px;
+  --rh-radius:    12px;
+  --rh-radius-lg: 20px;
+  --rh-radius-xl: 28px;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+* { scrollbar-width: thin; scrollbar-color: rgba(99,102,241,0.3) transparent; }
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 3px; }
+*::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.5); }
+
+html, body { height: 100%; }
+
+/* ── Noise texture overlay ─────────────────────────────────── */
+.rh-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ── Utilities ─────────────────────────────────────────────── */
+.rh-glass {
+  background: rgba(255,255,255,0.028);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--rh-border);
+}
+
+.rh-glass-strong {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.rh-glow-indigo { box-shadow: 0 0 60px rgba(99,102,241,0.18), 0 0 120px rgba(99,102,241,0.08); }
+.rh-glow-violet { box-shadow: 0 0 60px rgba(139,92,246,0.18), 0 0 120px rgba(139,92,246,0.08); }
+
+.rh-grad-text {
+  background: var(--rh-grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rh-grad-text-warm {
+  background: linear-gradient(135deg, #fcd34d, #f97316, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes rh-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes rh-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+  70%  { box-shadow: 0 0 0 16px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+
+@keyframes rh-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes rh-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rh-bounce-dot {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-5px); }
+}
+
+@keyframes rh-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes rh-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.rh-animate-float  { animation: rh-float 6s ease-in-out infinite; }
+.rh-animate-fade-up { animation: rh-fade-up 0.6s ease both; }
+
+/* ── Background gradients ──────────────────────────────────── */
+.rh-mesh-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 50% at 80% 60%,  rgba(139,92,246,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 10% 80%,  rgba(34,211,238,0.07) 0%, transparent 50%),
+    var(--rh-bg);
+}
+
+.rh-hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ── Card hover lift ───────────────────────────────────────── */
+.rh-card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.rh-card-hover:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99,102,241,0.3) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.15);
+}
+
+/* ── Ticker ─────────────────────────────────────────────────── */
+.rh-ticker-wrap { overflow: hidden; }
+.rh-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: rh-ticker 28s linear infinite;
+}
+.rh-ticker-track:hover { animation-play-state: paused; }
+
+/* ── Status dot pulse ──────────────────────────────────────── */
+.rh-status-online::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: rh-pulse-ring 2s ease-out infinite;
+}
+
+/* ── Gradient border card ──────────────────────────────────── */
+.rh-grad-border {
+  position: relative;
+  border-radius: var(--rh-radius-lg);
+  background: var(--rh-surface);
+}
+.rh-grad-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.3), rgba(34,211,238,0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Smooth page entry ─────────────────────────────────────── */
+main { animation: rh-fade-up 0.25s ease both; }
+
+/* ── Input focus glow ──────────────────────────────────────── */
+.mantine-Input-input:focus,
+.mantine-TextInput-input:focus,
+.mantine-PasswordInput-input:focus-within,
+.mantine-Textarea-input:focus {
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2) !important;
+}
+
+/* ── Premium button ────────────────────────────────────────── */
+.rh-btn-grad {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+.rh-btn-grad:hover {
+  box-shadow: 0 8px 28px rgba(99,102,241,0.5);
+  transform: translateY(-1px);
+}
+
+/* ── Section label utility ─────────────────────────────────── */
+.rh-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rh-text-3);
+  margin-bottom: 10px;
+}
